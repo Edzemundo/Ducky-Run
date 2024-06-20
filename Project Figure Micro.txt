@@ -1,0 +1,39 @@
+//yellow 0xFF00, red 0xFA00, Green 0x1CE0, Blue 0x001F, black 0x0
+
+//draw a project figure  
+
+#include "address_map_nios2.h"
+
+
+void VGA_figure(int, int, int, int, short); //x,y start and end, color
+
+int main()
+{
+	//clear the screen
+	VGA_figure(0, 0, 319, 239, 0); //0, 319 and 0, 239 and black = 0
+
+	while (1)
+	{
+		//X1, Y1, X2, Y2
+			VGA_figure(56,53,60,58, 0xFA00);
+			VGA_figure(50, 50, 55, 55, 0xFF00); //first 
+			VGA_figure(50, 56, 55, 61, 0xFF00);  //second 
+			
+	}
+
+	return 0;
+}
+
+void VGA_figure(int x1, int y1, int x2, int y2, short pixel_color)
+{
+	int pixel_ptr, row, col;
+
+	for (row = y1; row <= y2; row++)
+	{
+		for (col = x1; col <= x2; col++)
+		{
+			pixel_ptr = FPGA_ONCHIP_BASE + (row << 10) + (col << 1);
+			*(short*)(pixel_ptr) = pixel_color;
+		}
+	}
+}
